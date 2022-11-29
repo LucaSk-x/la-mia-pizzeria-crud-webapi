@@ -1,0 +1,80 @@
+﻿<div class="row no_pizza text-center d-none">
+    <div class="col-12">
+        <h3>Non ci sono pizze inserite</h3>
+    </div>
+</div>
+<div class="row justify-content-center">  
+    <input type="text" class="form-control" id="pizza_search" placeholder="Cerca la tua pizza">
+</div>
+
+<div class="row pizza_table d-none">
+
+</div>
+
+@section Scripts{
+        <script type="text/javascript">
+        getPizzaList();
+        function getPizzaList(){
+                axios.get('/api/pizza/get').then(res => renderPizzaList(res.data)).catch(error => {
+                    console.log(error);
+                })
+        };
+
+        document.getElementById('pizza_search').addEventListener('keyup', apiSearch);
+        let timeoutId = null;
+        function apiSearch(e){
+            if (e.target.value === ''){
+                getPizzaList();
+                return;
+            }
+
+            if (timeoutId != null){
+                    clearTimeout(timeoutId)
+            }
+
+            timeoutId = setTimeout(() => {
+                    axios.get('/api/pizza/search', {
+                        params: {
+                            title: e.target.value
+                        }
+                    }).then(resp => {
+                        renderPizzaList(resp.data)
+                    }).catch(error => console.log(error))
+            }, 1500)
+        }
+        function renderPizzaList(pizzaList){
+                if (pizzaList.length == 0) {
+                    document.querySelector('.no_pizza').classList.remove('d-none');
+                    document.querySelector('.pizza_table').classList.add('d-none');
+                } else {
+                    document.querySelector('.pizza_table').classList.remove('d-none');
+                    document.querySelector('.no_pizza').classList.add('d-none');
+                    document.querySelector('.pizza_table').innerHTML = '';
+                    pizzaList.forEach(pizza => renderPizza(pizza));
+                }
+        }
+        function renderPizza(pizza){
+                document.querySelector('.pizza_table').innerHTML += `<div class="col-12 col-md-4 p-2">
+                            <div class="card post h-100">
+                                <img src="${pizza.image}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                <h5 class="card-title">${pizza.name}</h5>
+                                <p class="card-text">Categoria: ${pizza.category.name}</p>
+                                <p class="card-text">${pizza.description}</p>
+                                <p class="card-text" id="ing_pizza${pizza.id}">Ingredienti: </p>
+                                <p class="card-text">${pizza.price} €</p>
+                                <a class="btn btn-primary" href="/guest/details/${pizza.id}">Dettagli</a>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                let ingredienti = '';
+                pizza.ingredients.forEach((ing, i, array) => {
+                    const delimitator = i < array.length - 1 ? ', ' : '.'
+                    ingredienti += ing.name + delimitator
+                })
+                document.getElementById('ing_pizza' + pizza.id).innerHTML += ingredienti;
+        }
+    </script>
+}
+
