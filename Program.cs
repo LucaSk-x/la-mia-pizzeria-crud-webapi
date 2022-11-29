@@ -1,7 +1,18 @@
+using la_mia_pizzeria_static.Models.Repositories;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+
+builder.Services.AddScoped<IDbPizzaRepository, DbPizzaRepository>();
+builder.Services.AddScoped<IDbCategoryRepository, DbCategoryRepository>();
+builder.Services.AddScoped<IDbIngredientRepository, DbIngredientRepository>();
 builder.Services.AddControllersWithViews();
+//builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 

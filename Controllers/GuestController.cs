@@ -9,5 +9,10 @@ namespace la_mia_pizzeria_crud_webapi.Controllers
             ViewData["title"] = "Pizza";
             return View();
         }
+
+        public IActionResult Details(int id)
+        {
+            return View(id);
+        }
     }
 }
