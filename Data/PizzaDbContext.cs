@@ -1,29 +1,31 @@
-﻿using la_mia_pizzeria_static.Models;
+﻿using la_mia_pizzeria_crud_webapi.Models;
+using la_mia_pizzeria_static.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace la_mia_pizzeria_static.Data
 {
     public class PizzaDbContext : DbContext
     {
-        public static PizzaDbContext GetInstance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new PizzaDbContext();
-                }
-                return _instance;
-            }
-        }
+        //public static PizzaDbContext GetInstance
+        //{
+        //    get
+        //    {
+        //        if (_instance == null)
+        //        {
+        //            _instance = new PizzaDbContext();
+        //        }
+        //        return _instance;
+        //    }
+        //}
 
-        private static PizzaDbContext _instance;
-        public PizzaDbContext()
-        {
-        }
+        //private static PizzaDbContext _instance;
+        //public PizzaDbContext()
+        //{
+        //}
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Message> Messages { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=la-mia-pizzeria;Integrated Security=True;Encrypt=False");

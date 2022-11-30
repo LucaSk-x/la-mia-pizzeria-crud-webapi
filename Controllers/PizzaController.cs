@@ -17,13 +17,13 @@ namespace la_mia_pizzeria_static.Controllers
 
         private IDbPizzaRepository pizzaRepository;
 
-        public PizzaController()
+        public PizzaController(IDbPizzaRepository _pizza)
         {
-            pizzaRepository = new DbPizzaRepository();
+            pizzaRepository = _pizza;
         }
         public IActionResult Index()
         {
-            ViewData["Title"] = "Todi Pizza";
+            ViewData["Title"] = "Don Ciro Pizza";
             return View(pizzaRepository.Get());
         }
         // filtro per pizze con categoria
@@ -31,7 +31,7 @@ namespace la_mia_pizzeria_static.Controllers
         {
 
             List<Pizza> Pizze = pizzaRepository.GetByCategoryId(categoryId);
-            ViewData["Title"] = "Todi Pizza";
+            ViewData["Title"] = "Don Ciro Pizza";
             return View("Index", Pizze);
         }
 
